@@ -81,7 +81,7 @@ p {
 </div>
 ```
 
-![bfc-1](../pictures/bfc-1.png)
+![bfc-1](./pictures/bfc-1.png)
 由于容器内元素浮动 脱离了文档流 所以容器只剩下 2px 的边距高度 如果触发容器的 BFC 那么容器将会包裹着浮动元素
 
 ```html
@@ -92,7 +92,7 @@ p {
 
 float 为 left/right 是子元素本身触发了 BFC 使普通布局流变成了浮动流布局 父级元素因为浮动从而高度塌陷 所以需要 overflow 来触发父级元素的 BFC 来重新布局回到普通布局
 
-![bfc-1](../pictures/bfc-2.png)
+![bfc-1](./pictures/bfc-2.png)
 
 3. **BFC 不与浮动元素重叠**
 
@@ -105,10 +105,10 @@ float 为 left/right 是子元素本身触发了 BFC 使普通布局流变成了
 </div>
 ```
 
-![bfc-3](../pictures/bfc-3.png)
+![bfc-3](./pictures/bfc-3.png)
 
 这时候其实第二个元素有部分被浮动元素所覆盖（但是文本信息不会被浮动元素所覆盖）如果想避免元素被覆盖 可触发第二个元素的 BFC 特性 在第二个元素中加入 **overflow:hidden** 就会变成
 
-![bfc-4](../pictures/bfc-4.png)
+![bfc-4](./pictures/bfc-4.png)
 
 用这个方法可以实现两列自适应布局 效果不错 这时候左边的宽度固定 右边的内容自适应宽度
