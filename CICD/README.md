@@ -24,6 +24,11 @@
    brew services start gitlab-runner
    ```
 
+3. 用 docker 启动
+  ```
+  docker run -d --name gitlab-runner --restart always -v /Users/lily/gitlab-runner:/etc/gitlab-runner -v /var/run/docker.sock:/var/run/docker.sock  gitlab/gitlab-runner:latest
+  ```
+
 ### 注册一个 runner
 
 我们在 [macOS](https://docs.gitlab.com/runner/register/#macos) 上面注册一个 runner，用于自动化构建、测试、打包和部署你的应用程序。
@@ -36,7 +41,7 @@
 
 2. 请输入您的 GitLab 实例 URL（也称为 gitlab-ci 协调器 URL）。
 
-   ![获取 URL 和 token](2023-05-12-10-26-42.png)
+   ![获取 URL 和 token](2023-08-16-16-28-38.jpg)
 
 3. 输入您获取以注册 runner 的 token。
 4. 为 runner 输入一个描述。您可以稍后在 GitLab 用户界面中更改此值。
@@ -46,22 +51,22 @@
 8. 如果您将执行器设置为 docker，则会要求您提供在 .gitlab-ci.yml 中未定义默认镜像的项目要使用的默认镜像。
 
 ```shell
-sudo gitlab-runner register \
+ gitlab-runner register \
   --tag-list node \
-  --url https://gitlab.daocloud.cn/ \
-  --registration-token Y7RR-LJGyzVxhwuAf241 \
+  --url http://10.12.0.79/ \
+  --registration-token 9RmDLfGaoHGcBGzopHZ9 \
   --executor docker \
-  --docker-image "release.daocloud.io/dpo-ui/node" \
+  --docker-image "lizi666/demo:node" \
   --description "Runner for nodejs"
 ```
 
 ```shell
-sudo gitlab-runner register \
+gitlab-runner register \
   --tag-list docker \
-  --url https://gitlab.daocloud.cn/ \
-  --registration-token Y7RR-LJGyzVxhwuAf241 \
+  --url http://10.12.0.79/ \
+  --registration-token 9RmDLfGaoHGcBGzopHZ9 \
   --executor docker \
-  --docker-image "release.daocloud.io/dpo-ui/docker" \
+  --docker-image "lizi666/demo:docker" \
   --docker-privileged \
   --docker-volumes /var/run/docker.sock:/var/run/docker.sock \
   --description "Runner for docker"
@@ -71,7 +76,7 @@ sudo gitlab-runner register \
 
 - Settings > CI/CD，展开 Runners。
 
-  ![runners](2023-05-12-11-29-24.png)
+  ![runners](2023-08-18-10-26-45.jpg)
 
 ## 创建 `.gitlab-ci.yml`
 
@@ -110,7 +115,7 @@ EOF
 
 - CI/CD > Pipelines
 
-![pipeline and jobs](2023-05-12-13-36-44.png)
+![pipeline and jobs](2023-08-18-17-59-23.jpg)
 
 ### 配置 .gitlab-ci.yml
 
@@ -197,8 +202,8 @@ job:
 `rules`
 :使用 rules 来包含或排除流水线中的作业。
 
-`needs`
-:使用 `needs`: 来不按顺序执行作业。使用 `needs` 的作业之间的关系可以可视化为有向无环图。
+<!-- `needs`
+:使用 `needs`: 来不按顺序执行作业。使用 `needs` 的作业之间的关系可以可视化为有向无环图。 -->
 
 您可以忽略阶段排序并运行一些作业，而无需等待其他作业完成。 多个阶段的作业可以同时运行。
 
@@ -319,10 +324,7 @@ deploy:
 
 默认情况下，后期的作业会自动下载早期作业创建的所有产物。您可以使用 dependencies 控制作业中的产物下载行为。
 
-使用 needs 关键字时，作业只能从 needs 配置中定义的作业下载产物。
+<!-- 使用 needs 关键字时，作业只能从 needs 配置中定义的作业下载产物。 -->
 
 默认只收集成功作业的作业产物，产物在缓存后恢复。
 
-### CI/CD Demo
-
-[CI/CD templates](https://gitlab.daocloud.cn/help/ci/examples/index.md)
