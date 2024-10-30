@@ -150,7 +150,7 @@ module.exports = ALoader;
   },
 ```
 
-这里特殊的一点是 `行内 inline` `loader` 平时一般用的比较少
+这里特殊的一点是 `行内 inline` `loader` 平时一般用的比较少 引入方式 loader + 感叹号 + 文件路径
 
 ```js
 import xxx from "inline-loader1!inline-loader2!/src/xxx.css";
@@ -412,3 +412,113 @@ loader.pitch = function () {
 
 在某些情况下 我们对一个类型的文件配置了多个 Loader 但只想执行特定的 Loader 怎么办 如比只想执行内联类型的 CLoader
 
+<strong>rule 配置</strong>
+
+```js
+rules: [
+  {
+    test: /\.js$/,
+    use: ["a-loader"],
+  },
+  {
+    test: /\.js$/,
+    use: ["b-loader"],
+    enforce: "post",
+  },
+],
+```
+
+<strong>src/index.js</strong>
+
+```js
+import test from "c-loader!./test.js"; //使用内联Loader
+
+const a = 1;
+```
+
+<strong>a-loader.js</strong>
+
+```js
+function ALoader(content, map, meta) {
+  console.log("执行 a-loader 的normal阶段");
+  return content + "//给你加点注释(来自于Aloader)";
+}
+
+ALoader.pitch = function () {
+  console.log("ALoader的pitch阶段");
+};
+
+module.exports = ALoader;
+```
+
+<strong>b-loader.js</strong>
+
+```js
+function BLoader(content, map, meta) {
+  console.log("执行 b-loader 的normal阶段");
+  return content + "//给你加点注释(来自于BLoader)";
+}
+
+BLoader.pitch = function () {
+  console.log("BLoader的pitch阶段");
+};
+
+module.exports = BLoader;
+```
+
+<strong>c-loader.js</strong>
+
+```js
+function CLoader(content, map, meta) {
+  console.log("执行 c-loader 的normal阶段");
+  return content + "//给你加点注释(来自于CLoader)";
+}
+
+CLoader.pitch = function () {
+  console.log("CLoader的pitch阶段");
+};
+
+module.exports = CLoader;
+```
+
+正常情况下 此时的执行顺序是
+
+![alt text](./pictures/loader-09.png)
+
+使用 ! 前缀 将禁用所有已配置的 normal loader（通过为内联 import 语句 添加 ! 前缀）
+
+<strong>src/index.js</strong>
+
+```js
+import test from "!c-loader!./test.js";
+
+const a = 1;
+```
+
+此时 loader 的执行就会忽略掉 normal 类型的 ALoader
+
+![alt text](./pictures/loader-10.png)
+
+使用 !! 前缀 将禁用其他类型的 loader 只要内联 loader
+
+```js
+import test from "!!c-loader!./test.js";
+
+const a = 1;
+```
+
+此时 loader 的执行顺序就变成了
+
+![alt text](./pictures/loader-11.png)
+
+使用 -! 前缀 将禁用所有已配置的 preLoader 和 normal Loader 但是不禁用 postLoader
+
+```js
+import test from "-!c-loader!./test.js";
+
+const a = 1;
+```
+
+此时 loader 的执行顺序就变成了 演示中没有 preLoader
+
+![alt text](./pictures/loader-12.png)
