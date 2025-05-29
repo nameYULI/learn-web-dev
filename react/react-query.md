@@ -138,7 +138,7 @@ function Example() {
 - 如果是完全相同的请求，设置好完全相同的queryKey后，react query会自动帮我们做缓存工作
 - 如果不是完全相同的请求，设置相同的queryKey后，可能会出现问题
 
-[![react-query-1](1.gif)]
+[![react-query-1](./pictures/react-query1.gif)]
 
 ### networkMode 网络模式
 
