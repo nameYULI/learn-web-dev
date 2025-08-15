@@ -8,7 +8,7 @@
     <div class="inner"></div>
   </div>
   <button id="btn">click</button>
-  <script>
+  <!-- <script>
     // Let's get hold of those elements
     var outer = document.querySelector('.outer');
     var inner = document.querySelector('.inner');
@@ -62,7 +62,48 @@
       console.log('btn click');
       inner.click();
     });
+  </script> -->
+
+  <script>
+    function show() {
+      console.log("requestAnimationFrame execute");
+    }
+
+    requestAnimationFrame(show);
+    //DOM渲染
+    let dom = document.createElement("div");
+    dom.className = "box";
+    console.log("createElement");
+    document.body.appendChild(dom);
+    console.log("append Child");
+
+    //定时器
+    setTimeout(() => {
+      console.log("setTimeout 0");
+    }, 0)
+    setTimeout(() => {
+      console.log("setTimeout 1");
+    }, 0)
+
+    // Promise
+    let p1 = new Promise((resolve, reject) => {
+      console.log("p1 Promise executor");
+      setTimeout(resolve("result1"), 0);
+    }).then((value) => {
+      console.log("p1 Promise then:", value);
+    })
+
+    let p2 = Promise.resolve("result2").then((value) => {
+      console.log("p2 Promise then:", value);
+    })
+    // 同步alert
+    console.log("end");
+    console.log("第一个script结束");
   </script>
+  <script>
+    console.log("元素出现了吗?");
+  </script>
+
 </body>
 
 </html>
